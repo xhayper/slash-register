@@ -144,7 +144,7 @@ client.on("ready", async () => {
     new SlashCommandBuilder()
       .setName("user")
       .setDescription("Replies with user info!"),
-    // @ts-ignore
+    // @ts-expect-error
   ].forEach((builder) => slashRegister.addCommand(builder.toJSON()));
 
   console.log("Commands registered! Syncing...");
