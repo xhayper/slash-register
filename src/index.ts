@@ -12,6 +12,7 @@ import {
   APIApplicationCommandOptionBase,
   EqualUtility,
 } from "./equalUtility";
+
 export class SlashRegister {
   guildCommandList: Collection<string, APIApplicationCommandBase[]> =
     new Collection();
@@ -123,7 +124,7 @@ export class SlashRegister {
 
         const { updateList, createList, deleteList } = this.#getDiff(
           guildCommand,
-          (this.guildCommandList.get(guildId) || [])
+          this.guildCommandList.get(guildId) || []
         );
 
         let createPromise: Promise<any> | undefined;

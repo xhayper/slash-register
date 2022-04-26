@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
 import { APIApplicationCommand } from "discord-api-types/v10";
-import { EqualUtility } from "../src/equalUtility";
+import { APIApplicationCommandBase, EqualUtility } from "../src/equalUtility";
 
 it("should return true (using SlashCommandBuilder)", () => {
   const firstTestCommand = new SlashCommandBuilder();
@@ -369,9 +369,10 @@ it("should return true (using complex JSON, using null instead of undefined and 
 
   expect(
     EqualUtility.isCommandEqual(
-      // @ts-expect-error
-      firstTestCommand,
-      secondTestCommand
+      //@ts-expect-error
+      firstTestCommand as APIApplicationCommandBase,
+      //@ts-expect-error
+      secondTestCommand as APIApplicationCommandBase
     )
   ).toBe(true);
 });
