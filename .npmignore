@@ -1,0 +1,7 @@
+# Folder
+__test__/
+src/
+
+# File
+jest.config.ts
+tsconfig.json
