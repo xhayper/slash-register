@@ -14,7 +14,7 @@ import {
   APIApplicationCommandUserOption,
   ApplicationCommandOptionType,
   LocalizationMap,
-} from "discord-api-types/v10";
+} from "discord-api-types/v9";
 
 export const Locale = [
   "en-US",
@@ -324,6 +324,13 @@ export const EqualUtility = new (class {
     return true;
   }
 
+  #isArrayEqualByLength(a?: any[], b?: any[]): boolean {
+    if (this.#isNull(a) && this.#isNull(b)) return true;
+    if (this.#isNull(a) && b!.length == 0) return true;
+    if (this.#isNull(b) && a!.length == 0) return true;
+    return false;
+  }
+
   isCommandEqual(
     a?: APIApplicationCommandOptionBase<any> & {
       options?: APIApplicationCommandOption[];
@@ -335,11 +342,10 @@ export const EqualUtility = new (class {
     if (this.#isNull(a) && this.#isNull(b)) return true;
     if (this.#isNull(a) || this.#isNull(b)) return false;
     if (!this.isBaseEqual(a, b)) return false;
-    if (!a!.options && !b!.options) return true;
-    if (!a!.options || !b!.options) return false;
-    if (a!.options.length != b!.options.length) return false;
-    const aOptions = a!.options.sort();
-    const bOptions = b!.options.sort();
+    if (this.#isArrayEqualByLength(a?.options, b?.options)) return true;
+    if (a!.options!.length != b!.options!.length) return false;
+    const aOptions = a!.options!.sort();
+    const bOptions = b!.options!.sort();
     for (let i = 0; i < aOptions.length; i++) {
       if (!this.#equalUsingType(aOptions[i], bOptions[i])) return false;
     }

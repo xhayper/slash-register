@@ -8,7 +8,7 @@ import {
   APIGuild,
   APIUser,
   Routes,
-} from "discord-api-types/v10";
+} from "discord-api-types/v9";
 
 export class SlashRegister {
   guildCommandList: Collection<string, SlashCommandBuilder[]> =
@@ -33,12 +33,12 @@ export class SlashRegister {
     }
 
     if (this.token)
-      this.#rest = new REST({ version: "10" }).setToken(this.token);
+      this.#rest = new REST({ version: "9" }).setToken(this.token);
   }
 
   async login() {
     if (!this.#rest)
-      this.#rest = new REST({ version: "10" }).setToken(this.token!);
+      this.#rest = new REST({ version: "9" }).setToken(this.token!);
     if (this.userId) return;
     const user = (await this.#rest.get(Routes.user())) as APIUser;
     this.userId = user.id;
@@ -62,7 +62,7 @@ export class SlashRegister {
     this.guildCommandList.set(guild, currentGuildCommand);
   }
 
-  getDiff(
+  #getDiff(
     oldCommandList: APIApplicationCommand[],
     newCommandList: APIApplicationCommandOptionBase<any>[]
   ): {
@@ -99,45 +99,8 @@ export class SlashRegister {
     };
   }
 
-  async sync() {
+  async syncGuild() {
     if (!this.userId || !this.#rest) throw new Error("Not logged in");
-
-    const currentCommandList = (await this.#rest.get(
-      Routes.applicationCommands(this.userId)
-    )) as APIApplicationCommand[];
-
-    // TODO: Clean up this mess
-    const { updateList, createList, deleteList } = this.getDiff(
-      currentCommandList,
-      this.commandList.map(
-        (builder) => builder.toJSON() as APIApplicationCommandOptionBase<any>
-      )
-    );
-
-    const updatePromises: Promise<any>[] = [];
-    const createPromises: Promise<any> = this.#rest.put(
-      Routes.applicationCommands(this.userId),
-      {
-        body: createList,
-      }
-    );
-    const deletePromises: Promise<any>[] = [];
-
-    for (const [id, command] of updateList) {
-      updatePromises.push(
-        this.#rest.patch(Routes.applicationCommand(this.userId, id), {
-          body: command,
-        })
-      );
-    }
-
-    for (const id of deleteList) {
-      deletePromises.push(
-        this.#rest.delete(Routes.applicationCommand(this.userId, id))
-      );
-    }
-
-    await Promise.all([...updatePromises, createPromises, ...deletePromises]);
 
     const guildList: APIGuild[] | undefined =
       (this.guildCommandList.size > 0 &&
@@ -156,7 +119,7 @@ export class SlashRegister {
           Routes.applicationGuildCommands(this.userId, guildId)
         )) as APIApplicationCommand[];
 
-        const { updateList, createList, deleteList } = this.getDiff(
+        const { updateList, createList, deleteList } = this.#getDiff(
           guildCommand,
           (this.guildCommandList.get(guildId) || []).map(
             (builder) =>
@@ -164,13 +127,17 @@ export class SlashRegister {
           )
         );
 
+        let createPromise: Promise<any> | undefined;
+
+        if (createList.length > 0)
+          createPromise = this.#rest.put(
+            Routes.applicationGuildCommands(this.userId, guildId),
+            {
+              body: createList,
+            }
+          );
+
         const updatePromises: Promise<any>[] = [];
-        const createPromises: Promise<any> = this.#rest.put(
-          Routes.applicationGuildCommands(this.userId, guildId),
-          {
-            body: createList,
-          }
-        );
         const deletePromises: Promise<any>[] = [];
 
         for (const [id, command] of updateList) {
@@ -194,11 +161,57 @@ export class SlashRegister {
 
         await Promise.all([
           ...updatePromises,
-          createPromises,
+          createPromise,
           ...deletePromises,
         ]);
       }
     }
+  }
+
+  async sync() {
+    if (!this.userId || !this.#rest) throw new Error("Not logged in");
+
+    const currentCommandList = (await this.#rest.get(
+      Routes.applicationCommands(this.userId)
+    )) as APIApplicationCommand[];
+
+    const { updateList, createList, deleteList } = this.#getDiff(
+      currentCommandList,
+      this.commandList.map(
+        (builder) => builder.toJSON() as APIApplicationCommandOptionBase<any>
+      )
+    );
+
+    let createPromise: Promise<any> | undefined;
+
+    if (createList.length > 0)
+      createPromise = this.#rest.put(Routes.applicationCommands(this.userId), {
+        body: createList,
+      });
+
+    const updatePromises: Promise<any>[] = [];
+    const deletePromises: Promise<any>[] = [];
+
+    for (const [id, command] of updateList) {
+      updatePromises.push(
+        this.#rest.patch(Routes.applicationCommand(this.userId, id), {
+          body: command,
+        })
+      );
+    }
+
+    for (const id of deleteList) {
+      deletePromises.push(
+        this.#rest.delete(Routes.applicationCommand(this.userId, id))
+      );
+    }
+
+    await Promise.all([...updatePromises, createPromise, ...deletePromises]);
+  }
+
+  async syncAll() {
+    await this.sync();
+    await this.syncGuild();
   }
 }
 
