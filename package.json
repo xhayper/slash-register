@@ -1,12 +1,19 @@
 {
   "name": "slash-register",
   "version": "1.0.0",
-  "description": "A library to help you with registering slashcommand",
+  "description": "A library to help you with registering slash-command",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
-  "repository": "https://github.com/xhayper/slash-register.git",
   "author": "xhayper",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xhayper/slash-register.git"
+  },
+  "keywords": [
+    "slash-command",
+    "discord"
+  ],
   "scripts": {
     "build": "rimraf dist && npx tsc",
     "test": "npx jest",
@@ -29,5 +36,9 @@
     "ts-jest": "^27.1.4",
     "ts-node": "^10.7.0",
     "typescript": "^4.6.3"
-  }
+  },
+  "engines": {
+    "node": ">=16.9.0"
+  },
+  "packageManager": "yarn@1.22.18"
 }
