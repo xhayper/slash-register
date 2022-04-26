@@ -145,14 +145,20 @@ export class SlashRegister {
       undefined;
 
     if (guildList) {
-      for (const guild of guildList) {
+      const guildIdList = [
+        ...new Set([
+          ...guildList.map((guild) => guild.id),
+          ...Object.keys(this.guildCommandList),
+        ]),
+      ];
+      for (const guildId of guildIdList) {
         const guildCommand = (await this.#rest.get(
-          Routes.applicationGuildCommands(this.userId, guild.id)
+          Routes.applicationGuildCommands(this.userId, guildId)
         )) as APIApplicationCommand[];
 
         const { updateList, createList, deleteList } = this.getDiff(
           guildCommand,
-          (this.guildCommandList.get(guild.id) || []).map(
+          (this.guildCommandList.get(guildId) || []).map(
             (builder) =>
               builder.toJSON() as APIApplicationCommandOptionBase<any>
           )
@@ -160,7 +166,7 @@ export class SlashRegister {
 
         const updatePromises: Promise<any>[] = [];
         const createPromises: Promise<any> = this.#rest.put(
-          Routes.applicationGuildCommands(this.userId, guild.id),
+          Routes.applicationGuildCommands(this.userId, guildId),
           {
             body: createList,
           }
@@ -170,7 +176,7 @@ export class SlashRegister {
         for (const [id, command] of updateList) {
           updatePromises.push(
             this.#rest.patch(
-              Routes.applicationGuildCommand(this.userId, guild.id, id),
+              Routes.applicationGuildCommand(this.userId, guildId, id),
               {
                 body: command,
               }
@@ -181,12 +187,16 @@ export class SlashRegister {
         for (const id of deleteList) {
           deletePromises.push(
             this.#rest.delete(
-              Routes.applicationGuildCommand(this.userId, guild.id, id)
+              Routes.applicationGuildCommand(this.userId, guildId, id)
             )
           );
         }
 
-        await Promise.all([...updatePromises, createPromises, ...deletePromises]);
+        await Promise.all([
+          ...updatePromises,
+          createPromises,
+          ...deletePromises,
+        ]);
       }
     }
   }
