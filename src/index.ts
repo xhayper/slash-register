@@ -57,6 +57,43 @@ export class SlashRegister {
     this.guildCommandList.set(guild, currentGuildCommand);
   }
 
+  getFormattedList(
+    oldCommandList: APIApplicationCommand[],
+    newCommandList: APIApplicationCommandOptionBase<any>[]
+  ): {
+    updateList: Collection<string, APIApplicationCommandOptionBase<any>>;
+    createList: APIApplicationCommandOptionBase<any>[];
+    deleteList: string[];
+  } {
+    const updateList = new Collection<
+      string,
+      APIApplicationCommandOptionBase<any>
+    >();
+    const createList: APIApplicationCommandOptionBase<any>[] = [];
+    const deleteList: string[] = [];
+
+    for (const command of newCommandList) {
+      const cmd = oldCommandList.find((c) => c.name === command.name);
+      if (cmd && !EqualUtility.isCommandEqual(command, cmd)) {
+        updateList.set(cmd.id, command);
+      } else if (!cmd) {
+        createList.push(command);
+      }
+    }
+
+    for (const command of oldCommandList) {
+      if (!this.commandList.find((c) => c.name === command.name)) {
+        deleteList.push(command.id);
+      }
+    }
+
+    return {
+      updateList,
+      createList,
+      deleteList,
+    };
+  }
+
   async sync() {
     if (!this.userId) throw new Error("Not logged in");
 
@@ -69,36 +106,18 @@ export class SlashRegister {
         ((await this.#rest.get(Routes.userGuilds())) as APIGuild[])) ||
       undefined;
 
-    const updateList = new Collection<string, SlashCommandBuilder>();
-    const createList: SlashCommandBuilder[] = [];
-    const deleteList: string[] = [];
-
-    for (const command of this.commandList) {
-      const cmd = currentCommandList.find((c) => c.name === command.name);
-      if (
-        cmd &&
-        !EqualUtility.isCommandEqual(
-          command.toJSON() as APIApplicationCommandOptionBase<any>,
-          cmd
-        )
-      ) {
-        updateList.set(cmd.id, command);
-      } else if (!cmd) {
-        createList.push(command);
-      }
-    }
-
-    for (const command of currentCommandList) {
-      if (!this.commandList.find((c) => c.name === command.name)) {
-        deleteList.push(command.id);
-      }
-    }
+    const { updateList, createList, deleteList } = this.getFormattedList(
+      currentCommandList,
+      this.commandList.map(
+        (builder) => builder.toJSON() as APIApplicationCommandOptionBase<any>
+      )
+    );
 
     const updatePromises: Promise<any>[] = [];
     const createPromises: Promise<any> = this.#rest.put(
       Routes.applicationCommands(this.userId),
       {
-        body: createList.map((c) => c.toJSON()),
+        body: createList,
       }
     );
     const deletePromises: Promise<any>[] = [];
@@ -106,7 +125,7 @@ export class SlashRegister {
     for (const [id, command] of updateList) {
       updatePromises.push(
         this.#rest.patch(Routes.applicationCommand(this.userId, id), {
-          body: command.toJSON(),
+          body: command,
         })
       );
     }
