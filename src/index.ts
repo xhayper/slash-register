@@ -17,34 +17,30 @@ export class SlashRegister {
   guildCommandList: Collection<string, APIApplicationCommandBase[]> =
     new Collection();
   commandList: APIApplicationCommandBase[] = [];
-  userId: string | undefined;
   token: string | undefined;
 
   #rest: REST | undefined;
 
-  constructor(client: Client);
-  constructor(token: string);
-  constructor(...args: [Client | string | undefined]) {
-    if (!args[0]) {
+  constructor(arg?: Client | string) {
+    if (!arg) {
       this.token = process.env.DISCORD_TOKEN;
-    } else if (typeof args[0] == "string") {
-      this.token = args[0];
+    } else if (typeof arg == "string") {
+      this.token = arg;
     } else {
-      const client = args[0];
+      const client = arg;
       this.token = client.token!;
-      this.userId = client.user!.id;
     }
-
-    if (this.token)
-      this.#rest = new REST({ version: "9" }).setToken(this.token);
   }
 
-  async login() {
-    if (!this.#rest)
-      this.#rest = new REST({ version: "9" }).setToken(this.token!);
-    if (this.userId) return;
+  login(token?: string) {
+    this.token = token || this.token;
+    this.#rest = new REST({ version: "9" }).setToken(this.token!);
+  }
+
+  async getUserId(): Promise<string | undefined> {
+    if (!this.#rest) return;
     const user = (await this.#rest.get(Routes.user())) as APIUser;
-    this.userId = user.id;
+    return user.id;
   }
 
   async addCommand(command: APIApplicationCommandBase) {
@@ -103,7 +99,10 @@ export class SlashRegister {
   }
 
   async syncGuild() {
-    if (!this.userId || !this.#rest) throw new Error("Not logged in");
+    if (!this.#rest) throw new Error("Not logged in");
+
+    const userId = await this.getUserId();
+    if (!userId) throw new Error("Invalid token");
 
     const guildList: APIGuild[] | undefined =
       (this.guildCommandList.size > 0 &&
@@ -119,7 +118,7 @@ export class SlashRegister {
       ];
       for (const guildId of guildIdList) {
         const guildCommand = (await this.#rest.get(
-          Routes.applicationGuildCommands(this.userId, guildId)
+          Routes.applicationGuildCommands(userId, guildId)
         )) as APIApplicationCommand[];
 
         const { updateList, createList, deleteList } = this.#getDiff(
@@ -131,7 +130,7 @@ export class SlashRegister {
 
         if (createList.length > 0)
           createPromise = this.#rest.put(
-            Routes.applicationGuildCommands(this.userId, guildId),
+            Routes.applicationGuildCommands(userId, guildId),
             {
               body: createList,
             }
@@ -143,7 +142,7 @@ export class SlashRegister {
         for (const [id, command] of updateList) {
           updatePromises.push(
             this.#rest.patch(
-              Routes.applicationGuildCommand(this.userId, guildId, id),
+              Routes.applicationGuildCommand(userId, guildId, id),
               {
                 body: command,
               }
@@ -154,7 +153,7 @@ export class SlashRegister {
         for (const id of deleteList) {
           deletePromises.push(
             this.#rest.delete(
-              Routes.applicationGuildCommand(this.userId, guildId, id)
+              Routes.applicationGuildCommand(userId, guildId, id)
             )
           );
         }
@@ -169,10 +168,13 @@ export class SlashRegister {
   }
 
   async sync() {
-    if (!this.userId || !this.#rest) throw new Error("Not logged in");
+    if (!this.#rest) throw new Error("Not logged in");
+
+    const userId = await this.getUserId();
+    if (!userId) throw new Error("Invalid token");
 
     const currentCommandList = (await this.#rest.get(
-      Routes.applicationCommands(this.userId)
+      Routes.applicationCommands(userId)
     )) as APIApplicationCommand[];
 
     const { updateList, createList, deleteList } = this.#getDiff(
@@ -183,7 +185,7 @@ export class SlashRegister {
     let createPromise: Promise<any> | undefined;
 
     if (createList.length > 0)
-      createPromise = this.#rest.put(Routes.applicationCommands(this.userId), {
+      createPromise = this.#rest.put(Routes.applicationCommands(userId), {
         body: createList,
       });
 
@@ -192,7 +194,7 @@ export class SlashRegister {
 
     for (const [id, command] of updateList) {
       updatePromises.push(
-        this.#rest.patch(Routes.applicationCommand(this.userId, id), {
+        this.#rest.patch(Routes.applicationCommand(userId, id), {
           body: command,
         })
       );
@@ -200,7 +202,7 @@ export class SlashRegister {
 
     for (const id of deleteList) {
       deletePromises.push(
-        this.#rest.delete(Routes.applicationCommand(this.userId, id))
+        this.#rest.delete(Routes.applicationCommand(userId, id))
       );
     }
 
