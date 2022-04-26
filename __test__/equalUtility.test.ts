@@ -227,3 +227,151 @@ it("should return true (using complex SlashCommandBuilder and JSON, using null i
     )
   ).toBe(true);
 });
+
+it("should return true (using complex JSON, using null instead of undefined and missing array)", () => {
+  const firstTestCommand = {
+    name: "test",
+    name_localizations: null,
+    description: "test",
+    description_localizations: null,
+    options: [
+      {
+        choices: null,
+        autocomplete: null,
+        type: 3,
+        name: "test",
+        name_localizations: null,
+        description: "test",
+        description_localizations: null,
+        required: false,
+      },
+      {
+        name: "test",
+        name_localizations: null,
+        description: "test",
+        description_localizations: null,
+        required: false,
+        type: 11,
+      },
+      {
+        name: "test",
+        name_localizations: null,
+        description: "test",
+        description_localizations: null,
+        required: false,
+        type: 5,
+      },
+      {
+        name: "test",
+        name_localizations: null,
+        description: "test",
+        description_localizations: null,
+        required: false,
+        type: 9,
+      },
+      {
+        type: 1,
+        name: "test",
+        description: "test",
+        options: [
+          {
+            type: 3,
+            name: "test",
+            description: "test",
+            required: false,
+          },
+          {
+            name: "test",
+            description: "test",
+            required: false,
+            type: 11,
+          },
+        ],
+      },
+      {
+        type: 1,
+        name: "test",
+        description: "test",
+        options: [],
+      },
+    ],
+    default_permission: null,
+  };
+
+  const secondTestCommand = {
+    name: "test",
+    name_localizations: null,
+    description: "test",
+    description_localizations: null,
+    options: [
+      {
+        choices: null,
+        autocomplete: null,
+        type: 3,
+        name: "test",
+        name_localizations: null,
+        description: "test",
+        description_localizations: null,
+        required: false,
+      },
+      {
+        name: "test",
+        name_localizations: null,
+        description: "test",
+        description_localizations: null,
+        required: false,
+        type: 11,
+      },
+      {
+        name: "test",
+        name_localizations: null,
+        description: "test",
+        description_localizations: null,
+        required: false,
+        type: 5,
+      },
+      {
+        name: "test",
+        name_localizations: null,
+        description: "test",
+        description_localizations: null,
+        required: false,
+        type: 9,
+      },
+      {
+        type: 1,
+        name: "test",
+        description: "test",
+        options: [
+          {
+            type: 3,
+            name: "test",
+            description: "test",
+            required: false,
+          },
+          {
+            name: "test",
+            description: "test",
+            required: false,
+            type: 11,
+          },
+        ],
+      },
+      {
+        type: 1,
+        name: "test",
+        description: "test",
+        options: null,
+      },
+    ],
+    default_permission: null,
+  };
+
+  expect(
+    EqualUtility.isCommandEqual(
+      // @ts-expect-error
+      firstTestCommand,
+      secondTestCommand
+    )
+  ).toBe(true);
+});
