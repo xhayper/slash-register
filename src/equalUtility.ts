@@ -60,6 +60,10 @@ export type APIApplicationCommandOptionBase<
   readonly required?: boolean;
 };
 
+export type APIApplicationCommandBase = APIApplicationCommandOptionBase<any> & {
+  options?: APIApplicationCommandOption[];
+};
+
 export const EqualUtility = new (class {
   #isNull(a?: any): boolean {
     return !a || a === null || a === undefined;
@@ -380,12 +384,8 @@ export const EqualUtility = new (class {
   }
 
   isCommandEqual(
-    a?: APIApplicationCommandOptionBase<any> & {
-      options?: APIApplicationCommandOption[];
-    },
-    b?: APIApplicationCommandOptionBase<any> & {
-      options?: APIApplicationCommandOption[];
-    }
+    a?: APIApplicationCommandBase,
+    b?: APIApplicationCommandBase
   ): boolean {
     if (this.#isNull(a) && this.#isNull(b)) return true;
     if (this.#isNull(a) || this.#isNull(b)) return false;

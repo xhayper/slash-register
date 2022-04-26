@@ -1,5 +1,3 @@
-import { APIApplicationCommandOptionBase, EqualUtility } from "./equalUtility";
-import { SlashCommandBuilder } from "@discordjs/builders";
 import Collection from "@discordjs/collection";
 import type { Client } from "discord.js";
 import { REST } from "@discordjs/rest";
@@ -9,11 +7,15 @@ import {
   APIUser,
   Routes,
 } from "discord-api-types/v9";
-
+import {
+  APIApplicationCommandBase,
+  APIApplicationCommandOptionBase,
+  EqualUtility,
+} from "./equalUtility";
 export class SlashRegister {
-  guildCommandList: Collection<string, SlashCommandBuilder[]> =
+  guildCommandList: Collection<string, APIApplicationCommandBase[]> =
     new Collection();
-  commandList: SlashCommandBuilder[] = [];
+  commandList: APIApplicationCommandBase[] = [];
   userId: string | undefined;
   token: string | undefined;
 
@@ -44,12 +46,12 @@ export class SlashRegister {
     this.userId = user.id;
   }
 
-  async addCommand(command: SlashCommandBuilder) {
+  async addCommand(command: APIApplicationCommandBase) {
     this.commandList.push(command);
   }
 
   async addGuildCommand(
-    command: SlashCommandBuilder,
+    command: APIApplicationCommandBase,
     guild: string | string[]
   ) {
     if (Array.isArray(guild)) {
@@ -121,10 +123,7 @@ export class SlashRegister {
 
         const { updateList, createList, deleteList } = this.#getDiff(
           guildCommand,
-          (this.guildCommandList.get(guildId) || []).map(
-            (builder) =>
-              builder.toJSON() as APIApplicationCommandOptionBase<any>
-          )
+          (this.guildCommandList.get(guildId) || [])
         );
 
         let createPromise: Promise<any> | undefined;
@@ -177,9 +176,7 @@ export class SlashRegister {
 
     const { updateList, createList, deleteList } = this.#getDiff(
       currentCommandList,
-      this.commandList.map(
-        (builder) => builder.toJSON() as APIApplicationCommandOptionBase<any>
-      )
+      this.commandList
     );
 
     let createPromise: Promise<any> | undefined;
