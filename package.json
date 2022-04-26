@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "A library to help you with registering slashcommand",
   "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
   "repository": "https://github.com/xhayper/slash-register.git",
   "author": "xhayper",
   "license": "MIT",
