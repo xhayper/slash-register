@@ -77,11 +77,13 @@ export const EqualUtility = new (class {
   ): boolean {
     if (this.#isNull(a) && this.#isNull(b)) return true;
     if (this.#isNull(a) || this.#isNull(b)) return false;
+
     for (let locale of Locale) {
       const aValue = a![locale];
       const bValue = b![locale];
       if (!this.#isEqual(aValue, bValue)) return false;
     }
+
     return true;
   }
 
@@ -102,11 +104,13 @@ export const EqualUtility = new (class {
     a?: APIApplicationCommandOptionChoice[],
     b?: APIApplicationCommandOptionChoice[]
   ): boolean {
-    if (this.#isNull(a) && this.#isNull(b)) return true;
+    if (this.#isArrayEqualByLength(a, b)) return true;
     if (this.#isNull(a) || this.#isNull(b)) return false;
-    if (a!.length !== b!.length) return false;
+    if (a!.length != b!.length) return false;
+
     a = a!.sort();
     b = b!.sort();
+
     for (let i = 0; i < a.length; i++) {
       if (!this.isOptionChoiceEqual(a[i], b[i])) return false;
     }
@@ -119,9 +123,11 @@ export const EqualUtility = new (class {
   ): boolean {
     if (this.#isNull(a) && this.#isNull(b)) return true;
     if (this.#isNull(a) || this.#isNull(b)) return false;
+
     if (!this.#isEqual(a!.name, b!.name)) return false;
     if (!this.#isEqual(a!.description, b!.description)) return false;
     if (!this.#isEqual(a!.required, b!.required)) return false;
+
     if (!this.isLocalizationEqual(a!.name_localizations, b!.name_localizations))
       return false;
     if (
@@ -131,6 +137,7 @@ export const EqualUtility = new (class {
       )
     )
       return false;
+
     return true;
   }
 
@@ -138,9 +145,11 @@ export const EqualUtility = new (class {
     a?: APIApplicationCommandAttachmentOption,
     b?: APIApplicationCommandAttachmentOption
   ): boolean {
-    if (!a && !b) return true;
-    if (!a || !b) return false;
+    if (this.#isNull(a) && this.#isNull(b)) return true;
+    if (this.#isNull(a) || this.#isNull(b)) return false;
+
     if (!this.isBaseEqual(a, b)) return false;
+
     return true;
   }
 
@@ -148,9 +157,11 @@ export const EqualUtility = new (class {
     a?: APIApplicationCommandRoleOption,
     b?: APIApplicationCommandRoleOption
   ): boolean {
-    if (!a && !b) return true;
-    if (!a || !b) return false;
+    if (this.#isNull(a) && this.#isNull(b)) return true;
+    if (this.#isNull(a) || this.#isNull(b)) return false;
+
     if (!this.isBaseEqual(a, b)) return false;
+
     return true;
   }
 
@@ -160,7 +171,9 @@ export const EqualUtility = new (class {
   ): boolean {
     if (this.#isNull(a) && this.#isNull(b)) return true;
     if (this.#isNull(a) || this.#isNull(b)) return false;
+
     if (!this.isBaseEqual(a, b)) return false;
+
     return true;
   }
 
@@ -170,8 +183,11 @@ export const EqualUtility = new (class {
   ): boolean {
     if (this.#isNull(a) && this.#isNull(b)) return true;
     if (this.#isNull(a) || this.#isNull(b)) return false;
+
     if (!this.isBaseEqual(a, b)) return false;
+
     if (a!.autocomplete != b!.autocomplete) return false;
+
     if (
       !a!.autocomplete &&
       !b!.autocomplete &&
@@ -179,6 +195,7 @@ export const EqualUtility = new (class {
       !this.isArrayOptionChoiceEqual(a!.choices, b!.choices)
     )
       return false;
+
     return true;
   }
 
@@ -188,10 +205,14 @@ export const EqualUtility = new (class {
   ): boolean {
     if (this.#isNull(a) && this.#isNull(b)) return true;
     if (this.#isNull(a) || this.#isNull(b)) return false;
+
     if (!this.isBaseEqual(a, b)) return false;
+
     if (a!.min_value != b!.min_value) return false;
     if (a!.max_value != b!.max_value) return false;
+
     if (a!.autocomplete != b!.autocomplete) return false;
+
     if (
       !a!.autocomplete &&
       !b!.autocomplete &&
@@ -199,6 +220,7 @@ export const EqualUtility = new (class {
       !this.isArrayOptionChoiceEqual(a!.choices, b!.choices)
     )
       return false;
+
     return true;
   }
 
@@ -208,10 +230,14 @@ export const EqualUtility = new (class {
   ): boolean {
     if (this.#isNull(a) && this.#isNull(b)) return true;
     if (this.#isNull(a) || this.#isNull(b)) return false;
+
     if (!this.isBaseEqual(a, b)) return false;
+
     if (a!.min_value != b!.min_value) return false;
     if (a!.max_value != b!.max_value) return false;
+
     if (a!.autocomplete != b!.autocomplete) return false;
+
     if (
       !a!.autocomplete &&
       !b!.autocomplete &&
@@ -219,6 +245,7 @@ export const EqualUtility = new (class {
       !this.isArrayOptionChoiceEqual(a.choices, b.choices)
     )
       return false;
+
     return true;
   }
 
@@ -228,6 +255,7 @@ export const EqualUtility = new (class {
   ): boolean {
     if (this.#isNull(a) && this.#isNull(b)) return true;
     if (this.#isNull(a) || this.#isNull(b)) return false;
+
     if (!this.isBaseEqual(a, b)) return false;
     return true;
   }
@@ -238,11 +266,19 @@ export const EqualUtility = new (class {
   ): boolean {
     if (this.#isNull(a) && this.#isNull(b)) return true;
     if (this.#isNull(a) || this.#isNull(b)) return false;
+
     if (!this.isBaseEqual(a, b)) return false;
-    if (!a!.channel_types || !b!.channel_types) return false;
-    if (a!.channel_types!.length !== b!.channel_types!.length) return false;
-    if (!a!.channel_types.every((value) => b!.channel_types!.includes(value)))
+
+    if (this.#isArrayEqualByLength(a?.channel_types, b?.channel_types))
+      return true;
+
+    if (this.#isNull(a!.channel_types) || this.#isNull(b!.channel_types))
       return false;
+    if (a!.channel_types!.length != b!.channel_types!.length) return false;
+
+    if (!a!.channel_types!.every((value) => b!.channel_types!.includes(value)))
+      return false;
+
     return true;
   }
 
@@ -252,6 +288,7 @@ export const EqualUtility = new (class {
   ): boolean {
     if (this.#isNull(a) && this.#isNull(b)) return true;
     if (this.#isNull(a) || this.#isNull(b)) return false;
+
     if (!this.isBaseEqual(a, b)) return false;
     return true;
   }
@@ -295,11 +332,17 @@ export const EqualUtility = new (class {
   ): boolean {
     if (this.#isNull(a) && this.#isNull(b)) return true;
     if (this.#isNull(a) || this.#isNull(b)) return false;
+
     if (!this.isBaseEqual(a, b)) return false;
-    if (!a!.options || !b!.options) return false;
-    if (a!.options.length != b!.options.length) return false;
-    const aOptions = a!.options.sort();
-    const bOptions = b!.options.sort();
+
+    if (this.#isArrayEqualByLength(a!.options, b!.options)) return true;
+
+    if (this.#isNull(a!.options) || this.#isNull(b!.options)) return false;
+    if (a!.options!.length != b!.options!.length) return false;
+
+    const aOptions = a!.options!.sort();
+    const bOptions = b!.options!.sort();
+
     for (let i = 0; i < aOptions.length; i++) {
       if (!this.isSubcommandOptionEqual(aOptions[i], bOptions[i])) return false;
     }
@@ -312,12 +355,17 @@ export const EqualUtility = new (class {
   ): boolean {
     if (this.#isNull(a) && this.#isNull(b)) return true;
     if (this.#isNull(a) || this.#isNull(b)) return false;
+
     if (!this.isBaseEqual(a, b)) return false;
-    if (!a!.options && !b!.options) return true;
-    if (!a!.options || !b!.options) return false;
-    if (a!.options.length != b!.options.length) return false;
-    const aOptions = a!.options.sort();
-    const bOptions = b!.options.sort();
+
+    if (this.#isArrayEqualByLength(a?.options, b?.options)) return true;
+
+    if (this.#isNull(a) || this.#isNull(b)) return false;
+    if (a!.options!.length != b!.options!.length) return false;
+
+    const aOptions = a!.options!.sort();
+    const bOptions = b!.options!.sort();
+
     for (let i = 0; i < aOptions.length; i++) {
       if (!this.#equalUsingType(aOptions[i], bOptions[i])) return false;
     }
@@ -341,14 +389,21 @@ export const EqualUtility = new (class {
   ): boolean {
     if (this.#isNull(a) && this.#isNull(b)) return true;
     if (this.#isNull(a) || this.#isNull(b)) return false;
+
     if (!this.isBaseEqual(a, b)) return false;
+
     if (this.#isArrayEqualByLength(a?.options, b?.options)) return true;
+
+    if (this.#isNull(a) || this.#isNull(b)) return false;
     if (a!.options!.length != b!.options!.length) return false;
+
     const aOptions = a!.options!.sort();
     const bOptions = b!.options!.sort();
+
     for (let i = 0; i < aOptions.length; i++) {
       if (!this.#equalUsingType(aOptions[i], bOptions[i])) return false;
     }
+
     return true;
   }
 })();
