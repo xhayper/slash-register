@@ -8,4 +8,5 @@ src/
 # File
 jest.config.ts
 tsconfig.json
+.prettierrc
 *.tgz
