@@ -1,6 +1,6 @@
-import { SlashCommandBuilder } from "@discordjs/builders";
-import { APIApplicationCommand } from "discord-api-types/v10";
 import { APIApplicationCommandBase, EqualUtility } from "../src/equalUtility";
+import { APIApplicationCommand } from "discord-api-types/v10";
+import { SlashCommandBuilder } from "@discordjs/builders";
 
 it("should return true (using SlashCommandBuilder)", () => {
   const firstTestCommand = new SlashCommandBuilder();
