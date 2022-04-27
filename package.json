@@ -4,6 +4,7 @@
   "description": "A library to help you with registering slash-command",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
+  "runkitExampleFilename": "example/runkit.js",
   "author": "xhayper",
   "license": "MIT",
   "repository": {
