@@ -75,6 +75,10 @@ const slashRegister = new SlashRegister();
 })();
 ```
 
+## Don't like the implementation?
+
+- You can implement your own manager! This package provided a utility class called "EqualUtility" to check if two command is equal, So you don't have to implement your own checker!
+
 ## Links
 
 - [npm](https://www.npmjs.com/package/slash-register)
