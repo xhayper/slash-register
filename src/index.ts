@@ -60,11 +60,11 @@ export class SlashRegister {
     return user;
   }
 
-  async removeAllGlobalCommand() {
+  async clearGlobalCommand() {
     this.globalCommandList = [];
   }
 
-  async removeAlLGuildCommand() {
+  async clearGuildCommand() {
     this.guildCommandList = new Collection();
   }
 
