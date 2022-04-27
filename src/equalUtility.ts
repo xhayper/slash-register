@@ -13,45 +13,43 @@ import {
   APIApplicationCommandSubcommandOption,
   APIApplicationCommandUserOption,
   ApplicationCommandOptionType,
-  LocalizationMap,
-} from "discord-api-types/v9";
+  LocalizationMap
+} from 'discord-api-types/v9';
 
 export const Locale = [
-  "en-US",
-  "en-GB",
-  "bg",
-  "zh-CN",
-  "zh-TW",
-  "hr",
-  "cs",
-  "da",
-  "nl",
-  "fi",
-  "fr",
-  "de",
-  "el",
-  "hi",
-  "hu",
-  "it",
-  "ja",
-  "ko",
-  "lt",
-  "no",
-  "pl",
-  "pt-BR",
-  "ro",
-  "ru",
-  "es-ES",
-  "sv-SE",
-  "th",
-  "tr",
-  "uk",
-  "vi",
+  'en-US',
+  'en-GB',
+  'bg',
+  'zh-CN',
+  'zh-TW',
+  'hr',
+  'cs',
+  'da',
+  'nl',
+  'fi',
+  'fr',
+  'de',
+  'el',
+  'hi',
+  'hu',
+  'it',
+  'ja',
+  'ko',
+  'lt',
+  'no',
+  'pl',
+  'pt-BR',
+  'ro',
+  'ru',
+  'es-ES',
+  'sv-SE',
+  'th',
+  'tr',
+  'uk',
+  'vi'
 ] as const;
 
-export type APIApplicationCommandOptionBase<
-  Type extends ApplicationCommandOptionType
-> = {
+export type APIApplicationCommandOptionBase<Type extends ApplicationCommandOptionType> = {
   readonly type: Type;
   readonly name: string;
   readonly name_localizations?: LocalizationMap | null;
@@ -75,10 +73,7 @@ export const EqualUtility = new (class {
     return a === b;
   }
 
-  isLocalizationEqual(
-    a?: LocalizationMap | null,
-    b?: LocalizationMap | null
-  ): boolean {
+  isLocalizationEqual(a?: LocalizationMap | null, b?: LocalizationMap | null): boolean {
     if (this.#isNull(a) && this.#isNull(b)) return true;
     if (this.#isNull(a) || this.#isNull(b)) return false;
 
@@ -91,10 +86,7 @@ export const EqualUtility = new (class {
     return true;
   }
 
-  isOptionChoiceEqual(
-    a?: APIApplicationCommandOptionChoice,
-    b?: APIApplicationCommandOptionChoice
-  ): boolean {
+  isOptionChoiceEqual(a?: APIApplicationCommandOptionChoice, b?: APIApplicationCommandOptionChoice): boolean {
     if (this.#isNull(a) && this.#isNull(b)) return true;
     if (this.#isNull(a) || this.#isNull(b)) return false;
     return (
@@ -104,10 +96,7 @@ export const EqualUtility = new (class {
     );
   }
 
-  isArrayOptionChoiceEqual(
-    a?: APIApplicationCommandOptionChoice[],
-    b?: APIApplicationCommandOptionChoice[]
-  ): boolean {
+  isArrayOptionChoiceEqual(a?: APIApplicationCommandOptionChoice[], b?: APIApplicationCommandOptionChoice[]): boolean {
     if (this.#isArrayEqualByLength(a, b)) return true;
     if (this.#isNull(a) || this.#isNull(b)) return false;
     if (a!.length != b!.length) return false;
@@ -121,10 +110,7 @@ export const EqualUtility = new (class {
     return true;
   }
 
-  isBaseEqual(
-    a?: APIApplicationCommandOptionBase<any>,
-    b?: APIApplicationCommandOptionBase<any>
-  ): boolean {
+  isBaseEqual(a?: APIApplicationCommandOptionBase<any>, b?: APIApplicationCommandOptionBase<any>): boolean {
     if (this.#isNull(a) && this.#isNull(b)) return true;
     if (this.#isNull(a) || this.#isNull(b)) return false;
 
@@ -132,15 +118,8 @@ export const EqualUtility = new (class {
     if (!this.#isEqual(a!.description, b!.description)) return false;
     if (!this.#isEqual(a!.required, b!.required)) return false;
 
-    if (!this.isLocalizationEqual(a!.name_localizations, b!.name_localizations))
-      return false;
-    if (
-      !this.isLocalizationEqual(
-        a!.description_localizations,
-        b!.description_localizations
-      )
-    )
-      return false;
+    if (!this.isLocalizationEqual(a!.name_localizations, b!.name_localizations)) return false;
+    if (!this.isLocalizationEqual(a!.description_localizations, b!.description_localizations)) return false;
 
     return true;
   }
@@ -157,10 +136,7 @@ export const EqualUtility = new (class {
     return true;
   }
 
-  isRoleOptionEqual(
-    a?: APIApplicationCommandRoleOption,
-    b?: APIApplicationCommandRoleOption
-  ): boolean {
+  isRoleOptionEqual(a?: APIApplicationCommandRoleOption, b?: APIApplicationCommandRoleOption): boolean {
     if (this.#isNull(a) && this.#isNull(b)) return true;
     if (this.#isNull(a) || this.#isNull(b)) return false;
 
@@ -169,10 +145,7 @@ export const EqualUtility = new (class {
     return true;
   }
 
-  isUserOptionEqual(
-    a?: APIApplicationCommandUserOption,
-    b?: APIApplicationCommandUserOption
-  ): boolean {
+  isUserOptionEqual(a?: APIApplicationCommandUserOption, b?: APIApplicationCommandUserOption): boolean {
     if (this.#isNull(a) && this.#isNull(b)) return true;
     if (this.#isNull(a) || this.#isNull(b)) return false;
 
@@ -181,10 +154,7 @@ export const EqualUtility = new (class {
     return true;
   }
 
-  isStringOptionEqual(
-    a?: APIApplicationCommandStringOption,
-    b?: APIApplicationCommandStringOption
-  ): boolean {
+  isStringOptionEqual(a?: APIApplicationCommandStringOption, b?: APIApplicationCommandStringOption): boolean {
     if (this.#isNull(a) && this.#isNull(b)) return true;
     if (this.#isNull(a) || this.#isNull(b)) return false;
 
@@ -203,10 +173,7 @@ export const EqualUtility = new (class {
     return true;
   }
 
-  isNumberOptionEqual(
-    a?: APIApplicationCommandNumberOption,
-    b?: APIApplicationCommandNumberOption
-  ): boolean {
+  isNumberOptionEqual(a?: APIApplicationCommandNumberOption, b?: APIApplicationCommandNumberOption): boolean {
     if (this.#isNull(a) && this.#isNull(b)) return true;
     if (this.#isNull(a) || this.#isNull(b)) return false;
 
@@ -228,10 +195,7 @@ export const EqualUtility = new (class {
     return true;
   }
 
-  isIntegerOptionEqual(
-    a?: APIApplicationCommandIntegerOption,
-    b?: APIApplicationCommandIntegerOption
-  ): boolean {
+  isIntegerOptionEqual(a?: APIApplicationCommandIntegerOption, b?: APIApplicationCommandIntegerOption): boolean {
     if (this.#isNull(a) && this.#isNull(b)) return true;
     if (this.#isNull(a) || this.#isNull(b)) return false;
 
@@ -253,10 +217,7 @@ export const EqualUtility = new (class {
     return true;
   }
 
-  isBooleanOptionEqual(
-    a?: APIApplicationCommandBooleanOption,
-    b?: APIApplicationCommandBooleanOption
-  ): boolean {
+  isBooleanOptionEqual(a?: APIApplicationCommandBooleanOption, b?: APIApplicationCommandBooleanOption): boolean {
     if (this.#isNull(a) && this.#isNull(b)) return true;
     if (this.#isNull(a) || this.#isNull(b)) return false;
 
@@ -264,24 +225,18 @@ export const EqualUtility = new (class {
     return true;
   }
 
-  isChannelOptionEqual(
-    a?: APIApplicationCommandChannelOption,
-    b?: APIApplicationCommandChannelOption
-  ): boolean {
+  isChannelOptionEqual(a?: APIApplicationCommandChannelOption, b?: APIApplicationCommandChannelOption): boolean {
     if (this.#isNull(a) && this.#isNull(b)) return true;
     if (this.#isNull(a) || this.#isNull(b)) return false;
 
     if (!this.isBaseEqual(a, b)) return false;
 
-    if (this.#isArrayEqualByLength(a?.channel_types, b?.channel_types))
-      return true;
+    if (this.#isArrayEqualByLength(a?.channel_types, b?.channel_types)) return true;
 
-    if (this.#isNull(a!.channel_types) || this.#isNull(b!.channel_types))
-      return false;
+    if (this.#isNull(a!.channel_types) || this.#isNull(b!.channel_types)) return false;
     if (a!.channel_types!.length != b!.channel_types!.length) return false;
 
-    if (!a!.channel_types!.every((value) => b!.channel_types!.includes(value)))
-      return false;
+    if (!a!.channel_types!.every((value) => b!.channel_types!.includes(value))) return false;
 
     return true;
   }
@@ -297,10 +252,7 @@ export const EqualUtility = new (class {
     return true;
   }
 
-  #equalUsingType(
-    a?: APIApplicationCommandOptionBase<any>,
-    b?: APIApplicationCommandOptionBase<any>
-  ): boolean {
+  #equalUsingType(a?: APIApplicationCommandOptionBase<any>, b?: APIApplicationCommandOptionBase<any>): boolean {
     if (this.#isNull(a) && this.#isNull(b)) return true;
     if (this.#isNull(a) || this.#isNull(b)) return false;
     if (a!.type != b!.type) return false;
@@ -383,10 +335,7 @@ export const EqualUtility = new (class {
     return false;
   }
 
-  isCommandEqual(
-    a?: APIApplicationCommandBase,
-    b?: APIApplicationCommandBase
-  ): boolean {
+  isCommandEqual(a?: APIApplicationCommandBase, b?: APIApplicationCommandBase): boolean {
     if (this.#isNull(a) && this.#isNull(b)) return true;
     if (this.#isNull(a) || this.#isNull(b)) return false;
 
