@@ -157,7 +157,7 @@ client.login("YOUR TOKEN");
 
 ## Links
 
-- [npm](https://www.npmjs.com/package/slash-register.js)
+- [npm](https://www.npmjs.com/package/slash-register)
 
 ## Note
 
