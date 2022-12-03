@@ -1,14 +1,13 @@
 import { type APIApplicationCommand, type APIGuild, type APIUser, Routes } from 'discord-api-types/v10';
 import { EqualUtility } from './equalUtility';
-import { Collection } from '@discordjs/collection';
 import { REST } from '@discordjs/rest';
 
 export class SlashRegister {
-  guildCommandList: Collection<string, APIApplicationCommand[]> = new Collection();
+  guildCommandList: Map<string, APIApplicationCommand[]> = new Map();
   globalCommandList: APIApplicationCommand[] = [];
 
   token: string | undefined;
-  #rest: REST | undefined;
+  private rest: REST | undefined;
 
   constructor(token?: string) {
     if (token) this.token = token;
@@ -17,18 +16,18 @@ export class SlashRegister {
   login(token?: string) {
     this.token = token || process.env.DISCORD_TOKEN;
     if (!this.token) throw new Error('Invalid token');
-    this.#rest = new REST({ version: '9' }).setToken(this.token);
+    this.rest = new REST({ version: '10' }).setToken(this.token);
   }
 
-  #getDiff(
+  private getDiff(
     oldCommandList: APIApplicationCommand[],
     newCommandList: APIApplicationCommand[]
   ): {
-    updateList: Collection<string, APIApplicationCommand>;
+    updateList: Map<string, APIApplicationCommand>;
     createList: APIApplicationCommand[];
     deleteList: string[];
   } {
-    const updateList = new Collection<string, APIApplicationCommand>();
+    const updateList = new Map<string, APIApplicationCommand>();
     const createList: APIApplicationCommand[] = [];
     const deleteList: string[] = [];
 
@@ -55,8 +54,8 @@ export class SlashRegister {
   }
 
   async getUser(): Promise<APIUser | undefined> {
-    if (!this.#rest) return;
-    const user = (await this.#rest.get(Routes.user())) as APIUser;
+    if (!this.rest) return;
+    const user = (await this.rest.get(Routes.user())) as APIUser;
     return user;
   }
 
@@ -65,7 +64,7 @@ export class SlashRegister {
   }
 
   async clearGuildCommand() {
-    this.guildCommandList = new Collection();
+    this.guildCommandList = new Map();
   }
 
   async addGlobalCommand(command: APIApplicationCommand | APIApplicationCommand[]) {
@@ -93,22 +92,22 @@ export class SlashRegister {
   }
 
   async syncGuild() {
-    if (!this.#rest) throw new Error('Not logged in');
+    if (!this.rest) throw new Error('Not logged in');
 
     const user = await this.getUser();
     if (!user) throw new Error('Invalid token');
 
     const guildList: APIGuild[] | undefined =
-      (this.guildCommandList.size > 0 && ((await this.#rest.get(Routes.userGuilds())) as APIGuild[])) || undefined;
+      (this.guildCommandList.size > 0 && ((await this.rest.get(Routes.userGuilds())) as APIGuild[])) || undefined;
 
     if (guildList) {
       const guildIdList = [...new Set([...guildList.map((guild) => guild.id), ...Object.keys(this.guildCommandList)])];
       for (const guildId of guildIdList) {
-        const guildCommand = (await this.#rest.get(
+        const guildCommand = (await this.rest.get(
           Routes.applicationGuildCommands(user.id, guildId)
         )) as APIApplicationCommand[];
 
-        const { updateList, createList, deleteList } = this.#getDiff(
+        const { updateList, createList, deleteList } = this.getDiff(
           guildCommand,
           this.guildCommandList.get(guildId) || []
         );
@@ -116,7 +115,7 @@ export class SlashRegister {
         let createPromise: Promise<any> | undefined;
 
         if (createList.length > 0)
-          createPromise = this.#rest.put(Routes.applicationGuildCommands(user.id, guildId), {
+          createPromise = this.rest.put(Routes.applicationGuildCommands(user.id, guildId), {
             body: createList
           });
 
@@ -125,14 +124,14 @@ export class SlashRegister {
 
         for (const [id, command] of updateList) {
           updatePromises.push(
-            this.#rest.patch(Routes.applicationGuildCommand(user.id, guildId, id), {
+            this.rest.patch(Routes.applicationGuildCommand(user.id, guildId, id), {
               body: command
             })
           );
         }
 
         for (const id of deleteList) {
-          deletePromises.push(this.#rest.delete(Routes.applicationGuildCommand(user.id, guildId, id)));
+          deletePromises.push(this.rest.delete(Routes.applicationGuildCommand(user.id, guildId, id)));
         }
 
         await Promise.all([...updatePromises, createPromise, ...deletePromises]);
@@ -141,19 +140,19 @@ export class SlashRegister {
   }
 
   async sync() {
-    if (!this.#rest) throw new Error('Not logged in');
+    if (!this.rest) throw new Error('Not logged in');
 
     const user = await this.getUser();
     if (!user) throw new Error('Invalid token');
 
-    const currentCommandList = (await this.#rest.get(Routes.applicationCommands(user.id))) as APIApplicationCommand[];
+    const currentCommandList = (await this.rest.get(Routes.applicationCommands(user.id))) as APIApplicationCommand[];
 
-    const { updateList, createList, deleteList } = this.#getDiff(currentCommandList, this.globalCommandList);
+    const { updateList, createList, deleteList } = this.getDiff(currentCommandList, this.globalCommandList);
 
     let createPromise: Promise<any> | undefined;
 
     if (createList.length > 0)
-      createPromise = this.#rest.put(Routes.applicationCommands(user.id), {
+      createPromise = this.rest.put(Routes.applicationCommands(user.id), {
         body: createList
       });
 
@@ -162,14 +161,14 @@ export class SlashRegister {
 
     for (const [id, command] of updateList) {
       updatePromises.push(
-        this.#rest.patch(Routes.applicationCommand(user.id, id), {
+        this.rest.patch(Routes.applicationCommand(user.id, id), {
           body: command
         })
       );
     }
 
     for (const id of deleteList) {
-      deletePromises.push(this.#rest.delete(Routes.applicationCommand(user.id, id)));
+      deletePromises.push(this.rest.delete(Routes.applicationCommand(user.id, id)));
     }
 
     await Promise.all([...updatePromises, createPromise, ...deletePromises]);
@@ -181,27 +180,27 @@ export class SlashRegister {
   }
 
   async unsync() {
-    if (!this.#rest) throw new Error('Not logged in');
+    if (!this.rest) throw new Error('Not logged in');
 
     const user = await this.getUser();
     if (!user) throw new Error('Invalid token');
 
-    const guildList = (await this.#rest.get(Routes.userGuilds())) as APIGuild[];
+    const guildList = (await this.rest.get(Routes.userGuilds())) as APIGuild[];
 
     for (const guild of guildList) {
-      const commandList = (await this.#rest.get(
+      const commandList = (await this.rest.get(
         Routes.applicationGuildCommands(user.id, guild.id)
       )) as APIApplicationCommand[];
 
       for (const command of commandList) {
-        await this.#rest.delete(Routes.applicationGuildCommand(user.id, guild.id, command.id));
+        await this.rest.delete(Routes.applicationGuildCommand(user.id, guild.id, command.id));
       }
     }
 
-    const currentCommandList = (await this.#rest.get(Routes.applicationCommands(user.id))) as APIApplicationCommand[];
+    const currentCommandList = (await this.rest.get(Routes.applicationCommands(user.id))) as APIApplicationCommand[];
 
     for (const command of currentCommandList) {
-      await this.#rest.delete(Routes.applicationCommand(user.id, command.id));
+      await this.rest.delete(Routes.applicationCommand(user.id, command.id));
     }
   }
 }

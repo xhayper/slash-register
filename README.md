@@ -53,8 +53,8 @@ const slashRegister = new SlashRegister();
 ### Typescript
 
 ```ts
-import { APIApplicationCommandBase, SlashRegister } from 'slash-register';
 import { SlashCommandBuilder } from '@discordjs/builders';
+import { SlashRegister } from 'slash-register';
 
 const slashRegister = new SlashRegister();
 
@@ -67,7 +67,7 @@ const slashRegister = new SlashRegister();
     new SlashCommandBuilder().setName('ping').setDescription('Replies with pong!'),
     new SlashCommandBuilder().setName('server').setDescription('Replies with server info!'),
     new SlashCommandBuilder().setName('user').setDescription('Replies with user info!')
-  ].forEach((builder) => slashRegister.addGlobalCommand(builder.toJSON() as APIApplicationCommandBase));
+  ].forEach((builder) => slashRegister.addGlobalCommand(builder.toJSON()));
 
   console.log('Commands registered! Syncing...');
 

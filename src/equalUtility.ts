@@ -1,6 +1,5 @@
 import isEqual from 'fast-deep-equal';
 import {
-  type RESTPostAPIChatInputApplicationCommandsJSONBody,
   type APIApplicationCommandOption,
   type APIApplicationCommand,
   ApplicationCommandOptionType
