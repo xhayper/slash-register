@@ -201,7 +201,3 @@ dist
 *.code-workspace
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,node,macos
-
-package-lock.json
-yarn.lock
-test/

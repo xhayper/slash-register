@@ -1,15 +1,15 @@
-import { APIApplicationCommandBase, EqualUtility } from "../src/equalUtility";
-import { APIApplicationCommand } from "discord-api-types/v10";
-import { SlashCommandBuilder } from "@discordjs/builders";
+import type { APIApplicationCommand } from 'discord-api-types/v10';
+import { SlashCommandBuilder } from '@discordjs/builders';
+import { EqualUtility } from '../src/equalUtility';
 
-it("should return true (using SlashCommandBuilder)", () => {
+it('should return true (using SlashCommandBuilder)', () => {
   const firstTestCommand = new SlashCommandBuilder();
-  firstTestCommand.setName("test");
-  firstTestCommand.setDescription("test");
+  firstTestCommand.setName('test');
+  firstTestCommand.setDescription('test');
 
   const secondTestCommand = new SlashCommandBuilder();
-  secondTestCommand.setName("test");
-  secondTestCommand.setDescription("test");
+  secondTestCommand.setName('test');
+  secondTestCommand.setDescription('test');
 
   expect(
     EqualUtility.isCommandEqual(
@@ -19,18 +19,18 @@ it("should return true (using SlashCommandBuilder)", () => {
   ).toBe(true);
 });
 
-it("should return true (using SlashCommandBuilder and JSON)", () => {
+it('should return true (using SlashCommandBuilder and JSON)', () => {
   const firstTestCommand = new SlashCommandBuilder();
-  firstTestCommand.setName("test");
-  firstTestCommand.setDescription("test");
+  firstTestCommand.setName('test');
+  firstTestCommand.setDescription('test');
 
   const secondTestCommand = {
-    name: "test",
+    name: 'test',
     name_localizations: undefined,
-    description: "test",
+    description: 'test',
     description_localizations: undefined,
     options: [],
-    default_permission: undefined,
+    default_permission: undefined
   };
 
   expect(
@@ -42,18 +42,18 @@ it("should return true (using SlashCommandBuilder and JSON)", () => {
   ).toBe(true);
 });
 
-it("should return true (using SlashCommandBuilder and JSON, using null instead of undefined)", () => {
+it('should return true (using SlashCommandBuilder and JSON, using null instead of undefined)', () => {
   const firstTestCommand = new SlashCommandBuilder();
-  firstTestCommand.setName("test");
-  firstTestCommand.setDescription("test");
+  firstTestCommand.setName('test');
+  firstTestCommand.setDescription('test');
 
   const secondTestCommand = {
-    name: "test",
+    name: 'test',
     name_localizations: null,
-    description: "test",
+    description: 'test',
     description_localizations: null,
     options: [],
-    default_permission: null,
+    default_permission: null
   };
 
   expect(
@@ -65,59 +65,35 @@ it("should return true (using SlashCommandBuilder and JSON, using null instead o
   ).toBe(true);
 });
 
-it("should return true (using complex SlashCommandBuilder)", () => {
+it('should return true (using complex SlashCommandBuilder)', () => {
   const firstTestCommand = new SlashCommandBuilder();
-  firstTestCommand.setName("test");
-  firstTestCommand.setDescription("test");
-  firstTestCommand.addStringOption((option) =>
-    option.setName("test").setDescription("test")
-  );
-  firstTestCommand.addAttachmentOption((option) =>
-    option.setName("test").setDescription("test")
-  );
-  firstTestCommand.addBooleanOption((option) =>
-    option.setName("test").setDescription("test")
-  );
-  firstTestCommand.addMentionableOption((option) =>
-    option.setName("test").setDescription("test")
-  );
+  firstTestCommand.setName('test');
+  firstTestCommand.setDescription('test');
+  firstTestCommand.addStringOption((option) => option.setName('test').setDescription('test'));
+  firstTestCommand.addAttachmentOption((option) => option.setName('test').setDescription('test'));
+  firstTestCommand.addBooleanOption((option) => option.setName('test').setDescription('test'));
+  firstTestCommand.addMentionableOption((option) => option.setName('test').setDescription('test'));
   firstTestCommand.addSubcommand((builder) =>
     builder
-      .setName("test")
-      .setDescription("test")
-      .addStringOption((option) =>
-        option.setName("test").setDescription("test")
-      )
-      .addAttachmentOption((option) =>
-        option.setName("test").setDescription("test")
-      )
+      .setName('test')
+      .setDescription('test')
+      .addStringOption((option) => option.setName('test').setDescription('test'))
+      .addAttachmentOption((option) => option.setName('test').setDescription('test'))
   );
 
   const secondTestCommand = new SlashCommandBuilder();
-  secondTestCommand.setName("test");
-  secondTestCommand.setDescription("test");
-  secondTestCommand.addStringOption((option) =>
-    option.setName("test").setDescription("test")
-  );
-  secondTestCommand.addAttachmentOption((option) =>
-    option.setName("test").setDescription("test")
-  );
-  secondTestCommand.addBooleanOption((option) =>
-    option.setName("test").setDescription("test")
-  );
-  secondTestCommand.addMentionableOption((option) =>
-    option.setName("test").setDescription("test")
-  );
+  secondTestCommand.setName('test');
+  secondTestCommand.setDescription('test');
+  secondTestCommand.addStringOption((option) => option.setName('test').setDescription('test'));
+  secondTestCommand.addAttachmentOption((option) => option.setName('test').setDescription('test'));
+  secondTestCommand.addBooleanOption((option) => option.setName('test').setDescription('test'));
+  secondTestCommand.addMentionableOption((option) => option.setName('test').setDescription('test'));
   secondTestCommand.addSubcommand((builder) =>
     builder
-      .setName("test")
-      .setDescription("test")
-      .addStringOption((option) =>
-        option.setName("test").setDescription("test")
-      )
-      .addAttachmentOption((option) =>
-        option.setName("test").setDescription("test")
-      )
+      .setName('test')
+      .setDescription('test')
+      .addStringOption((option) => option.setName('test').setDescription('test'))
+      .addAttachmentOption((option) => option.setName('test').setDescription('test'))
   );
 
   expect(
@@ -128,95 +104,83 @@ it("should return true (using complex SlashCommandBuilder)", () => {
   ).toBe(true);
 });
 
-it("should return true (using complex SlashCommandBuilder and JSON, using null instead of undefined)", () => {
+it('should return true (using complex SlashCommandBuilder and JSON, using null instead of undefined)', () => {
   const firstTestCommand = new SlashCommandBuilder();
-  firstTestCommand.setName("test");
-  firstTestCommand.setDescription("test");
-  firstTestCommand.addStringOption((option) =>
-    option.setName("test").setDescription("test")
-  );
-  firstTestCommand.addAttachmentOption((option) =>
-    option.setName("test").setDescription("test")
-  );
-  firstTestCommand.addBooleanOption((option) =>
-    option.setName("test").setDescription("test")
-  );
-  firstTestCommand.addMentionableOption((option) =>
-    option.setName("test").setDescription("test")
-  );
+  firstTestCommand.setName('test');
+  firstTestCommand.setDescription('test');
+  firstTestCommand.addStringOption((option) => option.setName('test').setDescription('test'));
+  firstTestCommand.addAttachmentOption((option) => option.setName('test').setDescription('test'));
+  firstTestCommand.addBooleanOption((option) => option.setName('test').setDescription('test'));
+  firstTestCommand.addMentionableOption((option) => option.setName('test').setDescription('test'));
   firstTestCommand.addSubcommand((builder) =>
     builder
-      .setName("test")
-      .setDescription("test")
-      .addStringOption((option) =>
-        option.setName("test").setDescription("test")
-      )
-      .addAttachmentOption((option) =>
-        option.setName("test").setDescription("test")
-      )
+      .setName('test')
+      .setDescription('test')
+      .addStringOption((option) => option.setName('test').setDescription('test'))
+      .addAttachmentOption((option) => option.setName('test').setDescription('test'))
   );
 
   const secondTestCommand = {
-    name: "test",
+    name: 'test',
     name_localizations: null,
-    description: "test",
+    description: 'test',
     description_localizations: null,
     options: [
       {
         choices: null,
         autocomplete: null,
         type: 3,
-        name: "test",
+        name: 'test',
         name_localizations: null,
-        description: "test",
+        description: 'test',
         description_localizations: null,
-        required: false,
+        required: false
       },
       {
-        name: "test",
+        name: 'test',
         name_localizations: null,
-        description: "test",
+        description: 'test',
         description_localizations: null,
         required: false,
-        type: 11,
+        type: 11
       },
       {
-        name: "test",
+        name: 'test',
         name_localizations: null,
-        description: "test",
+        description: 'test',
         description_localizations: null,
         required: false,
-        type: 5,
+        type: 5
       },
       {
-        name: "test",
+        name: 'test',
         name_localizations: null,
-        description: "test",
+        description: 'test',
         description_localizations: null,
         required: false,
-        type: 9,
+        type: 9
       },
       {
         type: 1,
-        name: "test",
-        description: "test",
+        name: 'test',
+        description: 'test',
         options: [
           {
             type: 3,
-            name: "test",
-            description: "test",
-            required: false,
+            name: 'test',
+            description: 'test',
+            required: false
           },
           {
-            name: "test",
-            description: "test",
+            name: 'test',
+            description: 'test',
             required: false,
-            type: 11,
-          },
-        ],
-      },
+            type: 11
+          }
+        ]
+      }
     ],
-    default_permission: null,
+    default_permission: null
   };
 
   expect(
@@ -228,143 +192,143 @@ it("should return true (using complex SlashCommandBuilder and JSON, using null i
   ).toBe(true);
 });
 
-it("should return true (using complex JSON, using null instead of undefined and missing array)", () => {
+it('should return true (using complex JSON, using null instead of undefined and missing array)', () => {
   const firstTestCommand = {
-    name: "test",
+    name: 'test',
     name_localizations: undefined,
-    description: "test",
+    description: 'test',
     description_localizations: undefined,
     options: [
       {
         choices: undefined,
         autocomplete: undefined,
         type: 3,
-        name: "test",
+        name: 'test',
         name_localizations: undefined,
-        description: "test",
+        description: 'test',
         description_localizations: undefined,
-        required: false,
+        required: false
       },
       {
-        name: "test",
+        name: 'test',
         name_localizations: undefined,
-        description: "test",
+        description: 'test',
         description_localizations: undefined,
         required: false,
-        type: 11,
+        type: 11
       },
       {
-        name: "test",
+        name: 'test',
         name_localizations: undefined,
-        description: "test",
+        description: 'test',
         description_localizations: undefined,
         required: false,
-        type: 5,
+        type: 5
       },
       {
-        name: "test",
+        name: 'test',
         name_localizations: undefined,
-        description: "test",
+        description: 'test',
         description_localizations: undefined,
         required: false,
-        type: 9,
+        type: 9
       },
       {
         type: 1,
-        name: "test",
-        description: "test",
+        name: 'test',
+        description: 'test',
         options: [
           {
             type: 3,
-            name: "test",
-            description: "test",
-            required: false,
+            name: 'test',
+            description: 'test',
+            required: false
           },
           {
-            name: "test",
-            description: "test",
+            name: 'test',
+            description: 'test',
             required: false,
-            type: 11,
-          },
-        ],
+            type: 11
+          }
+        ]
       },
       {
         type: 1,
-        name: "test",
-        description: "test",
-        options: undefined,
-      },
+        name: 'test',
+        description: 'test',
+        options: undefined
+      }
     ],
-    default_permission: undefined,
+    default_permission: undefined
   };
 
   const secondTestCommand = {
-    name: "test",
+    name: 'test',
     name_localizations: null,
-    description: "test",
+    description: 'test',
     description_localizations: null,
     options: [
       {
         choices: null,
         autocomplete: null,
         type: 3,
-        name: "test",
+        name: 'test',
         name_localizations: null,
-        description: "test",
+        description: 'test',
         description_localizations: null,
-        required: false,
+        required: false
       },
       {
-        name: "test",
+        name: 'test',
         name_localizations: null,
-        description: "test",
+        description: 'test',
         description_localizations: null,
         required: false,
-        type: 11,
+        type: 11
       },
       {
-        name: "test",
+        name: 'test',
         name_localizations: null,
-        description: "test",
+        description: 'test',
         description_localizations: null,
         required: false,
-        type: 5,
+        type: 5
       },
       {
-        name: "test",
+        name: 'test',
         name_localizations: null,
-        description: "test",
+        description: 'test',
         description_localizations: null,
         required: false,
-        type: 9,
+        type: 9
       },
       {
         type: 1,
-        name: "test",
-        description: "test",
+        name: 'test',
+        description: 'test',
         options: [
           {
             type: 3,
-            name: "test",
-            description: "test",
-            required: false,
+            name: 'test',
+            description: 'test',
+            required: false
           },
           {
-            name: "test",
-            description: "test",
+            name: 'test',
+            description: 'test',
             required: false,
-            type: 11,
-          },
-        ],
+            type: 11
+          }
+        ]
       },
       {
         type: 1,
-        name: "test",
-        description: "test",
-        options: null,
-      },
+        name: 'test',
+        description: 'test',
+        options: null
+      }
     ],
-    default_permission: null,
+    default_permission: null
   };
 
   expect(
@@ -379,14 +343,14 @@ it("should return true (using complex JSON, using null instead of undefined and 
 
 //--------------------------------------------------------------------------------
 
-it("should return false (using SlashCommandBuilder)", () => {
+it('should return false (using SlashCommandBuilder)', () => {
   const firstTestCommand = new SlashCommandBuilder();
-  firstTestCommand.setName("test");
-  firstTestCommand.setDescription("test");
+  firstTestCommand.setName('test');
+  firstTestCommand.setDescription('test');
 
   const secondTestCommand = new SlashCommandBuilder();
-  secondTestCommand.setName("test");
-  secondTestCommand.setDescription("tes");
+  secondTestCommand.setName('test');
+  secondTestCommand.setDescription('tes');
 
   expect(
     EqualUtility.isCommandEqual(
@@ -396,18 +360,18 @@ it("should return false (using SlashCommandBuilder)", () => {
   ).toBe(false);
 });
 
-it("should return false (using SlashCommandBuilder and JSON)", () => {
+it('should return false (using SlashCommandBuilder and JSON)', () => {
   const firstTestCommand = new SlashCommandBuilder();
-  firstTestCommand.setName("test");
-  firstTestCommand.setDescription("test");
+  firstTestCommand.setName('test');
+  firstTestCommand.setDescription('test');
 
   const secondTestCommand = {
-    name: "test",
+    name: 'test',
     name_localizations: undefined,
-    description: "tes",
+    description: 'tes',
     description_localizations: undefined,
     options: [],
-    default_permission: undefined,
+    default_permission: undefined
   };
 
   expect(
@@ -419,18 +383,18 @@ it("should return false (using SlashCommandBuilder and JSON)", () => {
   ).toBe(false);
 });
 
-it("should return false (using SlashCommandBuilder and JSON, using null instead of undefined)", () => {
+it('should return false (using SlashCommandBuilder and JSON, using null instead of undefined)', () => {
   const firstTestCommand = new SlashCommandBuilder();
-  firstTestCommand.setName("test");
-  firstTestCommand.setDescription("test");
+  firstTestCommand.setName('test');
+  firstTestCommand.setDescription('test');
 
   const secondTestCommand = {
-    name: "tes",
+    name: 'tes',
     name_localizations: null,
-    description: "test",
+    description: 'test',
     description_localizations: null,
     options: [],
-    default_permission: null,
+    default_permission: null
   };
 
   expect(
@@ -442,59 +406,35 @@ it("should return false (using SlashCommandBuilder and JSON, using null instead 
   ).toBe(false);
 });
 
-it("should return false (using complex SlashCommandBuilder)", () => {
+it('should return false (using complex SlashCommandBuilder)', () => {
   const firstTestCommand = new SlashCommandBuilder();
-  firstTestCommand.setName("test");
-  firstTestCommand.setDescription("test");
-  firstTestCommand.addStringOption((option) =>
-    option.setName("test").setDescription("test")
-  );
-  firstTestCommand.addAttachmentOption((option) =>
-    option.setName("test").setDescription("test")
-  );
-  firstTestCommand.addBooleanOption((option) =>
-    option.setName("test").setDescription("test")
-  );
-  firstTestCommand.addMentionableOption((option) =>
-    option.setName("test").setDescription("test")
-  );
+  firstTestCommand.setName('test');
+  firstTestCommand.setDescription('test');
+  firstTestCommand.addStringOption((option) => option.setName('test').setDescription('test'));
+  firstTestCommand.addAttachmentOption((option) => option.setName('test').setDescription('test'));
+  firstTestCommand.addBooleanOption((option) => option.setName('test').setDescription('test'));
+  firstTestCommand.addMentionableOption((option) => option.setName('test').setDescription('test'));
   firstTestCommand.addSubcommand((builder) =>
     builder
-      .setName("test")
-      .setDescription("test")
-      .addStringOption((option) =>
-        option.setName("test").setDescription("tes")
-      )
-      .addAttachmentOption((option) =>
-        option.setName("test").setDescription("test")
-      )
+      .setName('test')
+      .setDescription('test')
+      .addStringOption((option) => option.setName('test').setDescription('tes'))
+      .addAttachmentOption((option) => option.setName('test').setDescription('test'))
   );
 
   const secondTestCommand = new SlashCommandBuilder();
-  secondTestCommand.setName("test");
-  secondTestCommand.setDescription("test");
-  secondTestCommand.addStringOption((option) =>
-    option.setName("test").setDescription("test")
-  );
-  secondTestCommand.addAttachmentOption((option) =>
-    option.setName("test").setDescription("test")
-  );
-  secondTestCommand.addBooleanOption((option) =>
-    option.setName("test").setDescription("test")
-  );
-  secondTestCommand.addMentionableOption((option) =>
-    option.setName("test").setDescription("test")
-  );
+  secondTestCommand.setName('test');
+  secondTestCommand.setDescription('test');
+  secondTestCommand.addStringOption((option) => option.setName('test').setDescription('test'));
+  secondTestCommand.addAttachmentOption((option) => option.setName('test').setDescription('test'));
+  secondTestCommand.addBooleanOption((option) => option.setName('test').setDescription('test'));
+  secondTestCommand.addMentionableOption((option) => option.setName('test').setDescription('test'));
   secondTestCommand.addSubcommand((builder) =>
     builder
-      .setName("test")
-      .setDescription("test")
-      .addStringOption((option) =>
-        option.setName("test").setDescription("test")
-      )
-      .addAttachmentOption((option) =>
-        option.setName("test").setDescription("test")
-      )
+      .setName('test')
+      .setDescription('test')
+      .addStringOption((option) => option.setName('test').setDescription('test'))
+      .addAttachmentOption((option) => option.setName('test').setDescription('test'))
   );
 
   expect(
@@ -505,95 +445,83 @@ it("should return false (using complex SlashCommandBuilder)", () => {
   ).toBe(false);
 });
 
-it("should return false (using complex SlashCommandBuilder and JSON, using null instead of undefined)", () => {
+it('should return false (using complex SlashCommandBuilder and JSON, using null instead of undefined)', () => {
   const firstTestCommand = new SlashCommandBuilder();
-  firstTestCommand.setName("test");
-  firstTestCommand.setDescription("test");
-  firstTestCommand.addStringOption((option) =>
-    option.setName("test").setDescription("test")
-  );
-  firstTestCommand.addAttachmentOption((option) =>
-    option.setName("test").setDescription("test")
-  );
-  firstTestCommand.addBooleanOption((option) =>
-    option.setName("test").setDescription("test")
-  );
-  firstTestCommand.addMentionableOption((option) =>
-    option.setName("test").setDescription("test")
-  );
+  firstTestCommand.setName('test');
+  firstTestCommand.setDescription('test');
+  firstTestCommand.addStringOption((option) => option.setName('test').setDescription('test'));
+  firstTestCommand.addAttachmentOption((option) => option.setName('test').setDescription('test'));
+  firstTestCommand.addBooleanOption((option) => option.setName('test').setDescription('test'));
+  firstTestCommand.addMentionableOption((option) => option.setName('test').setDescription('test'));
   firstTestCommand.addSubcommand((builder) =>
     builder
-      .setName("test")
-      .setDescription("test")
-      .addStringOption((option) =>
-        option.setName("test").setDescription("test")
-      )
-      .addAttachmentOption((option) =>
-        option.setName("test").setDescription("test")
-      )
+      .setName('test')
+      .setDescription('test')
+      .addStringOption((option) => option.setName('test').setDescription('test'))
+      .addAttachmentOption((option) => option.setName('test').setDescription('test'))
   );
 
   const secondTestCommand = {
-    name: "test",
+    name: 'test',
     name_localizations: null,
-    description: "test",
+    description: 'test',
     description_localizations: null,
     options: [
       {
         choices: null,
         autocomplete: null,
         type: 3,
-        name: "test",
+        name: 'test',
         name_localizations: null,
-        description: "test",
+        description: 'test',
         description_localizations: null,
-        required: false,
+        required: false
       },
       {
-        name: "test",
+        name: 'test',
         name_localizations: null,
-        description: "test",
+        description: 'test',
         description_localizations: null,
         required: false,
-        type: 11,
+        type: 11
       },
       {
-        name: "test",
+        name: 'test',
         name_localizations: null,
-        description: "test",
+        description: 'test',
         description_localizations: null,
         required: false,
-        type: 5,
+        type: 5
       },
       {
-        name: "test",
+        name: 'test',
         name_localizations: null,
-        description: "test",
+        description: 'test',
         description_localizations: null,
         required: false,
-        type: 9,
+        type: 9
       },
       {
         type: 1,
-        name: "test",
-        description: "test",
+        name: 'test',
+        description: 'test',
         options: [
           {
             type: 3,
-            name: "test",
-            description: "test",
-            required: false,
+            name: 'test',
+            description: 'test',
+            required: false
           },
           {
-            name: "test",
-            description: "test",
+            name: 'test',
+            description: 'test',
             required: false,
-            type: 11,
-          },
-        ],
-      },
+            type: 11
+          }
+        ]
+      }
     ],
-    default_permission: null,
+    default_permission: null
   };
 
   expect(
@@ -605,143 +533,143 @@ it("should return false (using complex SlashCommandBuilder and JSON, using null 
   ).toBe(true);
 });
 
-it("should return false (using complex JSON, using null instead of undefined and missing array)", () => {
+it('should return false (using complex JSON, using null instead of undefined and missing array)', () => {
   const firstTestCommand = {
-    name: "test",
+    name: 'test',
     name_localizations: undefined,
-    description: "test",
+    description: 'test',
     description_localizations: undefined,
     options: [
       {
         choices: undefined,
         autocomplete: undefined,
         type: 3,
-        name: "test",
+        name: 'test',
         name_localizations: undefined,
-        description: "test",
+        description: 'test',
         description_localizations: undefined,
-        required: false,
+        required: false
       },
       {
-        name: "test",
+        name: 'test',
         name_localizations: undefined,
-        description: "test",
+        description: 'test',
         description_localizations: undefined,
         required: false,
-        type: 11,
+        type: 11
       },
       {
-        name: "test",
+        name: 'test',
         name_localizations: undefined,
-        description: "test",
+        description: 'test',
         description_localizations: undefined,
         required: false,
-        type: 5,
+        type: 5
       },
       {
-        name: "test",
+        name: 'test',
         name_localizations: undefined,
-        description: "test",
+        description: 'test',
         description_localizations: undefined,
         required: false,
-        type: 9,
+        type: 9
       },
       {
         type: 1,
-        name: "test",
-        description: "test",
+        name: 'test',
+        description: 'test',
         options: [
           {
             type: 3,
-            name: "test",
-            description: "test",
-            required: false,
+            name: 'test',
+            description: 'test',
+            required: false
           },
           {
-            name: "test",
-            description: "test",
+            name: 'test',
+            description: 'test',
             required: false,
-            type: 11,
-          },
-        ],
+            type: 11
+          }
+        ]
       },
       {
         type: 1,
-        name: "test",
-        description: "test",
-        options: undefined,
-      },
+        name: 'test',
+        description: 'test',
+        options: undefined
+      }
     ],
-    default_permission: undefined,
+    default_permission: undefined
   };
 
   const secondTestCommand = {
-    name: "test",
+    name: 'test',
     name_localizations: null,
-    description: "test",
+    description: 'test',
     description_localizations: null,
     options: [
       {
         choices: null,
         autocomplete: null,
         type: 3,
-        name: "test",
+        name: 'test',
         name_localizations: null,
-        description: "test",
+        description: 'test',
         description_localizations: null,
-        required: false,
+        required: false
       },
       {
-        name: "test",
+        name: 'test',
         name_localizations: null,
-        description: "test",
+        description: 'test',
         description_localizations: null,
         required: false,
-        type: 11,
+        type: 11
       },
       {
-        name: "test",
+        name: 'test',
         name_localizations: null,
-        description: "test",
+        description: 'test',
         description_localizations: null,
         required: false,
-        type: 5,
+        type: 5
       },
       {
-        name: "test",
+        name: 'test',
         name_localizations: null,
-        description: "test",
+        description: 'test',
         description_localizations: null,
         required: false,
-        type: 9,
+        type: 9
       },
       {
         type: 1,
-        name: "test",
-        description: "test",
+        name: 'test',
+        description: 'test',
         options: [
           {
             type: 3,
-            name: "test",
-            description: "tes",
-            required: false,
+            name: 'test',
+            description: 'tes',
+            required: false
           },
           {
-            name: "test",
-            description: "test",
+            name: 'test',
+            description: 'test',
             required: false,
-            type: 11,
-          },
-        ],
+            type: 11
+          }
+        ]
       },
       {
         type: 1,
-        name: "test",
-        description: "test",
-        options: null,
-      },
+        name: 'test',
+        description: 'test',
+        options: null
+      }
     ],
-    default_permission: null,
+    default_permission: null
   };
 
   expect(
@@ -756,143 +684,143 @@ it("should return false (using complex JSON, using null instead of undefined and
 
 // -- Final Two Test --
 
-it("should return true (Final Test 1)", () => {
+it('should return true (Final Test 1)', () => {
   const firstTestCommand = {
-    name: "za",
+    name: 'za',
     name_localizations: undefined,
-    description: "as",
+    description: 'as',
     description_localizations: undefined,
     options: [
       {
         choices: undefined,
         autocomplete: undefined,
         type: 3,
-        name: "qr",
+        name: 'qr',
         name_localizations: undefined,
-        description: "a",
+        description: 'a',
         description_localizations: undefined,
-        required: false,
+        required: false
       },
       {
-        name: "l",
+        name: 'l',
         name_localizations: undefined,
-        description: "b",
+        description: 'b',
         description_localizations: undefined,
         required: false,
-        type: 11,
+        type: 11
       },
       {
-        name: "w",
+        name: 'w',
         name_localizations: undefined,
-        description: "f",
+        description: 'f',
         description_localizations: undefined,
         required: false,
-        type: 5,
+        type: 5
       },
       {
-        name: "z",
+        name: 'z',
         name_localizations: undefined,
-        description: "m",
+        description: 'm',
         description_localizations: undefined,
         required: false,
-        type: 9,
+        type: 9
       },
       {
         type: 1,
-        name: "c",
-        description: "b",
+        name: 'c',
+        description: 'b',
         options: [
           {
             type: 3,
-            name: "g",
-            description: "tes",
-            required: false,
+            name: 'g',
+            description: 'tes',
+            required: false
           },
           {
-            name: "e",
-            description: "a",
+            name: 'e',
+            description: 'a',
             required: false,
-            type: 11,
-          },
-        ],
+            type: 11
+          }
+        ]
       },
       {
         type: 1,
-        name: "h",
-        description: "2",
-        options: undefined,
-      },
+        name: 'h',
+        description: '2',
+        options: undefined
+      }
     ],
-    default_permission: undefined,
+    default_permission: undefined
   };
 
   const secondTestCommand = {
-    name: "za",
+    name: 'za',
     name_localizations: null,
-    description: "as",
+    description: 'as',
     description_localizations: null,
     options: [
       {
         choices: null,
         autocomplete: null,
         type: 3,
-        name: "qr",
+        name: 'qr',
         name_localizations: null,
-        description: "a",
+        description: 'a',
         description_localizations: null,
-        required: false,
+        required: false
       },
       {
-        name: "l",
+        name: 'l',
         name_localizations: null,
-        description: "b",
+        description: 'b',
         description_localizations: null,
         required: false,
-        type: 11,
+        type: 11
       },
       {
-        name: "w",
+        name: 'w',
         name_localizations: null,
-        description: "f",
+        description: 'f',
         description_localizations: null,
         required: false,
-        type: 5,
+        type: 5
       },
       {
-        name: "z",
+        name: 'z',
         name_localizations: null,
-        description: "m",
+        description: 'm',
         description_localizations: null,
         required: false,
-        type: 9,
+        type: 9
       },
       {
         type: 1,
-        name: "c",
-        description: "b",
+        name: 'c',
+        description: 'b',
         options: [
           {
             type: 3,
-            name: "g",
-            description: "tes",
-            required: false,
+            name: 'g',
+            description: 'tes',
+            required: false
           },
           {
-            name: "e",
-            description: "a",
+            name: 'e',
+            description: 'a',
             required: false,
-            type: 11,
-          },
-        ],
+            type: 11
+          }
+        ]
       },
       {
         type: 1,
-        name: "h",
-        description: "2",
-        options: null,
-      },
+        name: 'h',
+        description: '2',
+        options: null
+      }
     ],
-    default_permission: null,
+    default_permission: null
   };
 
   expect(
@@ -905,143 +833,143 @@ it("should return true (Final Test 1)", () => {
   ).toBe(true);
 });
 
-it("should return false (Final Test 2)", () => {
+it('should return false (Final Test 2)', () => {
   const firstTestCommand = {
-    name: "za",
+    name: 'za',
     name_localizations: undefined,
-    description: "as",
+    description: 'as',
     description_localizations: undefined,
     options: [
       {
         choices: undefined,
         autocomplete: undefined,
         type: 3,
-        name: "qr",
+        name: 'qr',
         name_localizations: undefined,
-        description: "a",
+        description: 'a',
         description_localizations: undefined,
-        required: false,
+        required: false
       },
       {
-        name: "l",
+        name: 'l',
         name_localizations: undefined,
-        description: "b",
+        description: 'b',
         description_localizations: undefined,
         required: false,
-        type: 11,
+        type: 11
       },
       {
-        name: "w",
+        name: 'w',
         name_localizations: undefined,
-        description: "f",
+        description: 'f',
         description_localizations: undefined,
         required: false,
-        type: 5,
+        type: 5
       },
       {
-        name: "z",
+        name: 'z',
         name_localizations: undefined,
-        description: "m",
+        description: 'm',
         description_localizations: undefined,
         required: false,
-        type: 9,
+        type: 9
       },
       {
         type: 1,
-        name: "c",
-        description: "b",
+        name: 'c',
+        description: 'b',
         options: [
           {
             type: 3,
-            name: "g",
-            description: "tes",
-            required: false,
+            name: 'g',
+            description: 'tes',
+            required: false
           },
           {
-            name: "e",
-            description: "a",
+            name: 'e',
+            description: 'a',
             required: false,
-            type: 11,
-          },
-        ],
+            type: 11
+          }
+        ]
       },
       {
         type: 1,
-        name: "h",
-        description: "2",
-        options: undefined,
-      },
+        name: 'h',
+        description: '2',
+        options: undefined
+      }
     ],
-    default_permission: undefined,
+    default_permission: undefined
   };
 
   const secondTestCommand = {
-    name: "a",
+    name: 'a',
     name_localizations: null,
-    description: "b",
+    description: 'b',
     description_localizations: null,
     options: [
       {
         choices: null,
         autocomplete: null,
         type: 3,
-        name: "c",
+        name: 'c',
         name_localizations: null,
-        description: "d",
+        description: 'd',
         description_localizations: null,
-        required: false,
+        required: false
       },
       {
-        name: "e",
+        name: 'e',
         name_localizations: null,
-        description: "f",
+        description: 'f',
         description_localizations: null,
         required: false,
-        type: 11,
+        type: 11
       },
       {
-        name: "g",
+        name: 'g',
         name_localizations: null,
-        description: "h",
+        description: 'h',
         description_localizations: null,
         required: false,
-        type: 5,
+        type: 5
       },
       {
-        name: "i",
+        name: 'i',
         name_localizations: null,
-        description: "j",
+        description: 'j',
         description_localizations: null,
         required: false,
-        type: 9,
+        type: 9
       },
       {
         type: 1,
-        name: "k",
-        description: "m",
+        name: 'k',
+        description: 'm',
         options: [
           {
             type: 3,
-            name: "n",
-            description: "o",
-            required: false,
+            name: 'n',
+            description: 'o',
+            required: false
           },
           {
-            name: "p",
-            description: "q",
+            name: 'p',
+            description: 'q',
             required: false,
-            type: 11,
-          },
-        ],
+            type: 11
+          }
+        ]
       },
       {
         type: 1,
-        name: "r",
-        description: "s",
-        options: null,
-      },
+        name: 'r',
+        description: 's',
+        options: null
+      }
     ],
-    default_permission: null,
+    default_permission: null
   };
 
   expect(

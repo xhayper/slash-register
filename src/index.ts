@@ -1,11 +1,11 @@
-import { APIApplicationCommand, APIGuild, APIUser, Routes } from 'discord-api-types/v9';
-import { APIApplicationCommandBase, EqualUtility } from './equalUtility';
-import Collection from '@discordjs/collection';
+import { type APIApplicationCommand, type APIGuild, type APIUser, Routes } from 'discord-api-types/v10';
+import { EqualUtility } from './equalUtility';
+import { Collection } from '@discordjs/collection';
 import { REST } from '@discordjs/rest';
 
 export class SlashRegister {
-  guildCommandList: Collection<string, APIApplicationCommandBase[]> = new Collection();
-  globalCommandList: APIApplicationCommandBase[] = [];
+  guildCommandList: Collection<string, APIApplicationCommand[]> = new Collection();
+  globalCommandList: APIApplicationCommand[] = [];
 
   token: string | undefined;
   #rest: REST | undefined;
@@ -22,14 +22,14 @@ export class SlashRegister {
 
   #getDiff(
     oldCommandList: APIApplicationCommand[],
-    newCommandList: APIApplicationCommandBase[]
+    newCommandList: APIApplicationCommand[]
   ): {
-    updateList: Collection<string, APIApplicationCommandBase>;
-    createList: APIApplicationCommandBase[];
+    updateList: Collection<string, APIApplicationCommand>;
+    createList: APIApplicationCommand[];
     deleteList: string[];
   } {
-    const updateList = new Collection<string, APIApplicationCommandBase>();
-    const createList: APIApplicationCommandBase[] = [];
+    const updateList = new Collection<string, APIApplicationCommand>();
+    const createList: APIApplicationCommand[] = [];
     const deleteList: string[] = [];
 
     for (const command of newCommandList) {
@@ -68,7 +68,7 @@ export class SlashRegister {
     this.guildCommandList = new Collection();
   }
 
-  async addGlobalCommand(command: APIApplicationCommandBase | APIApplicationCommandBase[]) {
+  async addGlobalCommand(command: APIApplicationCommand | APIApplicationCommand[]) {
     const currentGlobalCommandList = this.globalCommandList;
     if (Array.isArray(command)) {
       this.globalCommandList = [...currentGlobalCommandList, ...command];
@@ -77,7 +77,7 @@ export class SlashRegister {
     }
   }
 
-  async addGuildCommand(guild: string | string[], command: APIApplicationCommandBase | APIApplicationCommandBase[]) {
+  async addGuildCommand(guild: string | string[], command: APIApplicationCommand | APIApplicationCommand[]) {
     if (Array.isArray(guild)) {
       guild.forEach((g) => this.addGuildCommand(g, command));
       return;
