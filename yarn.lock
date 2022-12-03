@@ -3334,7 +3334,6 @@ __metadata:
   resolution: "slash-register@workspace:."
   dependencies:
     "@discordjs/builders": ^1.4.0
-    "@discordjs/collection": ^1.3.0
     "@discordjs/rest": ^1.4.0
     "@types/jest": ^29.2.3
     "@types/node": ^18.11.10

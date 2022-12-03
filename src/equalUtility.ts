@@ -6,7 +6,7 @@ import {
 } from 'discord-api-types/v10';
 
 export class EqualUtility {
-  static _optionEquals(
+  private static _optionEquals(
     existing: Record<string, any>,
     option: Record<string, any>,
     enforceOptionOrder = false
@@ -89,10 +89,7 @@ export class EqualUtility {
     return true;
   }
 
-  static isCommandEqual(
-    command1: APIApplicationCommand,
-    command2: APIApplicationCommand
-  ): boolean {
+  static isCommandEqual(command1: APIApplicationCommand, command2: APIApplicationCommand): boolean {
     let defaultMemberPermissions = null;
     let dmPermission = command2.dm_permission;
 
