@@ -86,3 +86,4 @@ const slashRegister = new SlashRegister();
 ## Note
 
 - This README are yoinked from [discord.js](https://github.com/discordjs/discord.js).
+- The code to check if command are equal is yoinked from [discord.js](https://github.com/discordjs/discord.js).
