@@ -69,31 +69,31 @@ it('should return true (using complex SlashCommandBuilder)', () => {
   const firstTestCommand = new SlashCommandBuilder();
   firstTestCommand.setName('test');
   firstTestCommand.setDescription('test');
-  firstTestCommand.addStringOption((option) => option.setName('test').setDescription('test'));
-  firstTestCommand.addAttachmentOption((option) => option.setName('test').setDescription('test'));
-  firstTestCommand.addBooleanOption((option) => option.setName('test').setDescription('test'));
-  firstTestCommand.addMentionableOption((option) => option.setName('test').setDescription('test'));
+  firstTestCommand.addStringOption((option) => option.setName('test1').setDescription('test'));
+  firstTestCommand.addAttachmentOption((option) => option.setName('test2').setDescription('test'));
+  firstTestCommand.addBooleanOption((option) => option.setName('test3').setDescription('test'));
+  firstTestCommand.addMentionableOption((option) => option.setName('test4').setDescription('test'));
   firstTestCommand.addSubcommand((builder) =>
     builder
-      .setName('test')
+      .setName('test5')
       .setDescription('test')
-      .addStringOption((option) => option.setName('test').setDescription('test'))
-      .addAttachmentOption((option) => option.setName('test').setDescription('test'))
+      .addStringOption((option) => option.setName('test6').setDescription('test'))
+      .addAttachmentOption((option) => option.setName('test7').setDescription('test'))
   );
 
   const secondTestCommand = new SlashCommandBuilder();
   secondTestCommand.setName('test');
   secondTestCommand.setDescription('test');
-  secondTestCommand.addStringOption((option) => option.setName('test').setDescription('test'));
-  secondTestCommand.addAttachmentOption((option) => option.setName('test').setDescription('test'));
-  secondTestCommand.addBooleanOption((option) => option.setName('test').setDescription('test'));
-  secondTestCommand.addMentionableOption((option) => option.setName('test').setDescription('test'));
+  secondTestCommand.addStringOption((option) => option.setName('test1').setDescription('test'));
+  secondTestCommand.addAttachmentOption((option) => option.setName('test2').setDescription('test'));
+  secondTestCommand.addBooleanOption((option) => option.setName('test3').setDescription('test'));
+  secondTestCommand.addMentionableOption((option) => option.setName('test4').setDescription('test'));
   secondTestCommand.addSubcommand((builder) =>
     builder
-      .setName('test')
+      .setName('test5')
       .setDescription('test')
-      .addStringOption((option) => option.setName('test').setDescription('test'))
-      .addAttachmentOption((option) => option.setName('test').setDescription('test'))
+      .addStringOption((option) => option.setName('test6').setDescription('test'))
+      .addAttachmentOption((option) => option.setName('test7').setDescription('test'))
   );
 
   expect(
@@ -140,8 +140,7 @@ it('should return false (using SlashCommandBuilder and JSON)', () => {
   expect(
     EqualUtility.isCommandEqual(
       firstTestCommand.toJSON() as APIApplicationCommand,
-      // @ts-expect-error
-      secondTestCommand
+      secondTestCommand as unknown as APIApplicationCommand
     )
   ).toBe(false);
 });
@@ -163,8 +162,7 @@ it('should return false (using SlashCommandBuilder and JSON)', () => {
   expect(
     EqualUtility.isCommandEqual(
       firstTestCommand.toJSON() as APIApplicationCommand,
-      // @ts-expect-error
-      secondTestCommand
+      secondTestCommand as unknown as APIApplicationCommand
     )
   ).toBe(false);
 });
@@ -173,31 +171,31 @@ it('should return false (using complex SlashCommandBuilder)', () => {
   const firstTestCommand = new SlashCommandBuilder();
   firstTestCommand.setName('test');
   firstTestCommand.setDescription('test');
-  firstTestCommand.addStringOption((option) => option.setName('test').setDescription('test'));
-  firstTestCommand.addAttachmentOption((option) => option.setName('test').setDescription('test'));
-  firstTestCommand.addBooleanOption((option) => option.setName('test').setDescription('test'));
-  firstTestCommand.addMentionableOption((option) => option.setName('test').setDescription('test'));
+  firstTestCommand.addStringOption((option) => option.setName('test1').setDescription('test'));
+  firstTestCommand.addAttachmentOption((option) => option.setName('test2').setDescription('test'));
+  firstTestCommand.addBooleanOption((option) => option.setName('test3').setDescription('test'));
+  firstTestCommand.addMentionableOption((option) => option.setName('test4').setDescription('test'));
   firstTestCommand.addSubcommand((builder) =>
     builder
-      .setName('test')
+      .setName('test5')
       .setDescription('test')
-      .addStringOption((option) => option.setName('test').setDescription('tes'))
-      .addAttachmentOption((option) => option.setName('test').setDescription('test'))
+      .addStringOption((option) => option.setName('test6').setDescription('tes'))
+      .addAttachmentOption((option) => option.setName('test7').setDescription('test'))
   );
 
   const secondTestCommand = new SlashCommandBuilder();
   secondTestCommand.setName('test');
   secondTestCommand.setDescription('test');
-  secondTestCommand.addStringOption((option) => option.setName('test').setDescription('test'));
-  secondTestCommand.addAttachmentOption((option) => option.setName('test').setDescription('test'));
-  secondTestCommand.addBooleanOption((option) => option.setName('test').setDescription('test'));
-  secondTestCommand.addMentionableOption((option) => option.setName('test').setDescription('test'));
+  secondTestCommand.addStringOption((option) => option.setName('test1').setDescription('test'));
+  secondTestCommand.addAttachmentOption((option) => option.setName('test2').setDescription('test'));
+  secondTestCommand.addBooleanOption((option) => option.setName('test3').setDescription('test'));
+  secondTestCommand.addMentionableOption((option) => option.setName('test4').setDescription('test'));
   secondTestCommand.addSubcommand((builder) =>
     builder
-      .setName('test')
+      .setName('test5')
       .setDescription('test')
-      .addStringOption((option) => option.setName('test').setDescription('test'))
-      .addAttachmentOption((option) => option.setName('test').setDescription('test'))
+      .addStringOption((option) => option.setName('test6').setDescription('test'))
+      .addAttachmentOption((option) => option.setName('test7').setDescription('test'))
   );
 
   expect(
@@ -219,14 +217,14 @@ it('should return false (using complex JSON and missing array)', () => {
         choices: undefined,
         autocomplete: undefined,
         type: 3,
-        name: 'test',
+        name: 'test1',
         name_localizations: undefined,
         description: 'test',
         description_localizations: undefined,
         required: false
       },
       {
-        name: 'test',
+        name: 'test2',
         name_localizations: undefined,
         description: 'test',
         description_localizations: undefined,
@@ -234,7 +232,7 @@ it('should return false (using complex JSON and missing array)', () => {
         type: 11
       },
       {
-        name: 'test',
+        name: 'test3',
         name_localizations: undefined,
         description: 'test',
         description_localizations: undefined,
@@ -242,7 +240,7 @@ it('should return false (using complex JSON and missing array)', () => {
         type: 5
       },
       {
-        name: 'test',
+        name: 'test4',
         name_localizations: undefined,
         description: 'test',
         description_localizations: undefined,
@@ -251,17 +249,17 @@ it('should return false (using complex JSON and missing array)', () => {
       },
       {
         type: 1,
-        name: 'test',
+        name: 'test5',
         description: 'test',
         options: [
           {
             type: 3,
-            name: 'test',
+            name: 'test6',
             description: 'test',
             required: false
           },
           {
-            name: 'test',
+            name: 'test7',
             description: 'test',
             required: false,
             type: 11
@@ -270,7 +268,7 @@ it('should return false (using complex JSON and missing array)', () => {
       },
       {
         type: 1,
-        name: 'test',
+        name: 'test8',
         description: 'test',
         options: undefined
       }
@@ -288,14 +286,14 @@ it('should return false (using complex JSON and missing array)', () => {
         choices: null,
         autocomplete: null,
         type: 3,
-        name: 'test',
+        name: 'test1',
         name_localizations: null,
         description: 'test',
         description_localizations: null,
         required: false
       },
       {
-        name: 'test',
+        name: 'test2',
         name_localizations: null,
         description: 'test',
         description_localizations: null,
@@ -303,7 +301,7 @@ it('should return false (using complex JSON and missing array)', () => {
         type: 11
       },
       {
-        name: 'test',
+        name: 'test3',
         name_localizations: null,
         description: 'test',
         description_localizations: null,
@@ -311,7 +309,7 @@ it('should return false (using complex JSON and missing array)', () => {
         type: 5
       },
       {
-        name: 'test',
+        name: 'test4',
         name_localizations: null,
         description: 'test',
         description_localizations: null,
@@ -325,12 +323,12 @@ it('should return false (using complex JSON and missing array)', () => {
         options: [
           {
             type: 3,
-            name: 'test',
+            name: 'test5',
             description: 'tes',
             required: false
           },
           {
-            name: 'test',
+            name: 'test6',
             description: 'test',
             required: false,
             type: 11
@@ -339,7 +337,7 @@ it('should return false (using complex JSON and missing array)', () => {
       },
       {
         type: 1,
-        name: 'test',
+        name: 'test7',
         description: 'test',
         options: null
       }
